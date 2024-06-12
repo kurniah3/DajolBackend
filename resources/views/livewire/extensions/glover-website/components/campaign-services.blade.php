@@ -1,0 +1,42 @@
+<div>
+    @if ($showEmpty || $services->count() > 0)
+        <div class="mt-16">
+            <div class='flex items-center my-4'>
+                <div class="{{ isRTL() ? 'ml-auto' : 'mr-auto' }}">
+                    <p class="text-start text-2xl font-semibold"> {{ $title ?? __('Campaigns') }}</p>
+                    <p class="text-start text-sm font-light"> {{ $subtitle ?? __('Services on discount/campaign') }}</p>
+                </div>
+                {{-- view all button --}}
+                @if ($services->hasMorePages())
+                    @php
+                        $link = route('glover-website.search', [
+                            'vendor_type_id' => $vendor_type_id,
+                            'sort' => 'campaign',
+                            'type' => 'service',
+                        ]);
+                    @endphp
+                    <a href="{{ $link ?? '' }}" class="">
+                        <div
+                            class="border border-gray-500 rounded-full px-4 py-2 flex items-center text-xs text-gray-500 hover:text-gray-700 space-x-2">
+                            <span>{{ __('View All') }}</span>
+                            @if (isRTL())
+                                <x-heroicon-o-arrow-left class="inline-block w-4 h-4" />
+                            @else
+                                <x-heroicon-o-arrow-right class="inline-block w-4 h-4" />
+                            @endif
+                        </div>
+                    </a>
+                @endif
+            </div>
+
+            <div
+                class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 md:gap-4 md:space-y-0 space-y-4 justify-items-stretch">
+                @foreach ($services as $service)
+                    @include('livewire.extensions.glover-website.components.list.service-card', [
+                        'service' => $service,
+                    ])
+                @endforeach
+            </div>
+        </div>
+    @endif
+</div>
